@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sandeep Pachauri — Integration &amp; Claude Architecture Hub</title>
+<meta name="description" content="A curated hub of Claude certification exams, architecture accelerators, integration writing, and videos by Sandeep Pachauri.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #EDEAE3;
+    --panel: #F5F3EE;
+    --panel-hi: #E4E0D6;
+    --line: #C9C2B3;
+    --text: #2B2E33;
+    --muted: #5B5F66;
+    --muted-dim: #8B8578;
+    --accent: #B5562E;
+    --accent-dim: #8F4222;
+    --linkedin: #4A5A6B;
+    --linkedin-dim: #333F4C;
+    --repo: #2B2E33;
+    --video: #7A4A2E;
+    --video-dim: #5C3720;
+    --danger: #A3402A;
+    --radius: 4px;
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'Inter', system-ui, sans-serif;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background: var(--bg);
+    color:var(--text);
+    font-family:var(--sans);
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .grid-overlay{
+    position:fixed; inset:0; pointer-events:none; z-index:0;
+    background-image:
+      linear-gradient(rgba(43,46,51,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(43,46,51,0.05) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 40%, transparent 90%);
+  }
+
+  .wrap{position:relative; z-index:1; max-width:1180px; margin:0 auto; padding:0 24px 80px;}
+
+  /* ===== Profile bar ===== */
+  .profile-bar{display:flex; flex-wrap:wrap; gap:10px; padding:20px 0 0;}
+  .profile-link{
+    display:flex; align-items:center; gap:8px; padding:8px 14px;
+    background:var(--panel); border:1px solid var(--line); border-radius:999px;
+    text-decoration:none; color:var(--text); font-family:var(--mono); font-size:12.5px;
+    transition:border-color .15s ease, transform .15s ease, box-shadow .15s ease;
+    cursor:pointer; font:inherit;
+  }
+  .profile-link:hover{border-color:var(--accent-dim); transform:translateY(-1px); box-shadow:0 8px 18px -12px rgba(181,86,46,0.35);}
+  .profile-icon{
+    display:flex; align-items:center; justify-content:center;
+    width:22px; height:22px; border-radius:5px; font-size:12px; font-weight:800; flex-shrink:0;
+  }
+  .li-icon{background:#4A5A6B; color:#F5F3EE; font-family:Inter, sans-serif;}
+  .gh-icon{background:#2B2E33; color:#F5F3EE;}
+  .pf-icon{background:var(--accent); color:#F5F3EE; font-size:11px;}
+  .pulse-icon{background:#8F4222; color:#F5F3EE; font-size:14px;}
+  .juri-icon{background:#6B4A8F; color:#F5F3EE; font-size:12px; font-family:var(--sans);}
+  .profile-label{white-space:nowrap;}
+  .ip-badge{
+    font-size:9px; padding:1px 5px; border-radius:3px; background:rgba(181,86,46,0.15);
+    color:var(--accent-dim); margin-left:4px; letter-spacing:0.04em; font-weight:700;
+  }
+
+  /* ===== Header ===== */
+  header{padding:32px 0 32px; border-bottom:1px solid var(--line);}
+  .eyebrow{
+    font-family:var(--mono); font-size:12px; letter-spacing:0.14em; text-transform:uppercase;
+    color:var(--accent); display:flex; align-items:center; gap:10px; margin-bottom:18px;
+  }
+  .eyebrow .dot{width:7px; height:7px; border-radius:50%; background:var(--accent); box-shadow:0 0 0 4px rgba(181,86,46,0.15); animation:pulse 2.4s infinite;}
+  @keyframes pulse{0%,100%{opacity:1;} 50%{opacity:0.4;}}
+
+  h1{font-size:clamp(30px, 4.4vw, 46px); line-height:1.08; margin:0 0 14px; font-weight:800; letter-spacing:-0.02em;}
+  h1 span{color:var(--accent);}
+  header p.sub{color:var(--muted); font-size:16px; max-width:620px; line-height:1.6; margin:0 0 28px;}
+
+  .meta-row{display:flex; flex-wrap:wrap; gap:10px 28px; font-family:var(--mono); font-size:12.5px; color:var(--muted-dim);}
+  .meta-row b{color:var(--text); font-weight:600;}
+
+  /* ===== Search console ===== */
+  .console{
+    margin-top:32px; background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+    overflow:hidden; box-shadow:0 14px 28px -20px rgba(43,46,51,0.25);
+  }
+  .console-bar{
+    display:flex; align-items:center; gap:10px; padding:10px 14px; background:var(--panel-hi);
+    border-bottom:1px solid var(--line); font-family:var(--mono); font-size:12px; color:var(--muted-dim);
+  }
+  .console-bar .lights{display:flex; gap:6px;}
+  .console-bar .lights span{width:9px; height:9px; border-radius:50%; display:inline-block;}
+  .l1{background:#E8615A;} .l2{background:#F5A623;} .l3{background:#22D3B8;}
+
+  .search-row{display:flex; align-items:center; padding:14px 16px; gap:10px;}
+  .search-row .prompt{font-family:var(--mono); color:var(--accent); font-size:15px;}
+  .search-row input{
+    flex:1; background:transparent; border:none; outline:none; color:var(--text);
+    font-family:var(--mono); font-size:15px; caret-color:var(--accent);
+  }
+  .search-row input::placeholder{color:var(--muted-dim);}
+  .search-row .count{font-family:var(--mono); font-size:12px; color:var(--muted-dim); white-space:nowrap;}
+
+  .sort-btn{
+    display:flex; align-items:center; gap:6px; background:transparent; border:1px solid var(--line);
+    border-radius:6px; padding:6px 10px; font-family:var(--mono); font-size:11px; color:var(--muted);
+    cursor:pointer; transition:all .15s ease; white-space:nowrap;
+  }
+  .sort-btn:hover{border-color:var(--accent-dim); color:var(--text);}
+  .sort-btn svg{width:13px; height:13px; transition:transform .2s ease;}
+  .sort-btn.desc svg{transform:rotate(180deg);}
+
+  .filters{display:flex; flex-wrap:wrap; gap:8px; padding:0 16px 16px;}
+  .chip{
+    font-family:var(--mono); font-size:12px; padding:7px 13px; border-radius:999px;
+    border:1px solid var(--line); background:transparent; color:var(--muted);
+    cursor:pointer; transition:all .15s ease; letter-spacing:0.02em;
+  }
+  .chip:hover{border-color:var(--accent-dim); color:var(--text);}
+  .chip.active{background:var(--accent); border-color:var(--accent); color:#F5F3EE; font-weight:600;}
+  .chip.active.li-active{background:var(--linkedin); border-color:var(--linkedin); color:#F5F3EE;}
+  .chip.active.repo-active{background:var(--repo); border-color:var(--repo); color:#F5F3EE;}
+  .chip.active.video-active{background:var(--video); border-color:var(--video); color:#F5F3EE;}
+
+  /* ===== Labels bar ===== */
+  .labels-row{
+    display:flex; align-items:flex-start; gap:12px; padding:0 16px 16px; border-top:1px solid var(--line);
+    padding-top:14px;
+  }
+  .labels-title{
+    font-family:var(--mono); font-size:10px; letter-spacing:0.1em; color:var(--muted-dim);
+    padding-top:5px; flex-shrink:0;
+  }
+  .labels-list{display:flex; flex-wrap:wrap; gap:6px;}
+  .label-chip{
+    font-family:var(--mono); font-size:10.5px; padding:4px 10px; border-radius:999px;
+    border:1px solid var(--line); background:var(--panel-hi); color:var(--muted);
+    cursor:pointer; transition:all .15s ease; letter-spacing:0.01em;
+  }
+  .label-chip:hover{border-color:var(--accent-dim); color:var(--text);}
+  .label-chip.active{background:var(--accent); border-color:var(--accent); color:#F5F3EE; font-weight:600;}
+
+  /* ===== Tab routes ===== */
+  .tab-row{
+    display:flex; gap:4px; margin-top:40px; border-bottom:1px solid var(--line);
+    overflow-x:auto; scrollbar-width:none;
+  }
+  .tab-row::-webkit-scrollbar{display:none;}
+  .tab-btn{
+    font-family:var(--mono); font-size:12.5px; letter-spacing:0.06em; text-transform:uppercase;
+    padding:12px 18px; background:transparent; border:none; color:var(--muted-dim);
+    cursor:pointer; position:relative; white-space:nowrap; transition:color .15s ease;
+  }
+  .tab-btn .n{
+    display:inline-block; margin-left:6px; font-size:10px; padding:1px 6px; border-radius:999px;
+    background:var(--panel-hi); color:var(--muted-dim);
+  }
+  .tab-btn:hover{color:var(--text);}
+  .tab-btn.active{color:var(--text); font-weight:700;}
+  .tab-btn.active::after{content:''; position:absolute; left:0; right:0; bottom:-1px; height:2px;}
+  .tab-btn[data-tab="exams"].active::after{background:var(--accent);}
+  .tab-btn[data-tab="repos"].active::after{background:var(--repo);}
+  .tab-btn[data-tab="blog"].active::after{background:var(--linkedin);}
+  .tab-btn[data-tab="videos"].active::after{background:var(--video);}
+  .tab-btn[data-tab="exams"].active .n{background:rgba(181,86,46,0.15); color:var(--accent-dim);}
+  .tab-btn[data-tab="repos"].active .n{background:rgba(43,46,51,0.12); color:var(--repo);}
+  .tab-btn[data-tab="blog"].active .n{background:rgba(74,90,107,0.15); color:var(--linkedin-dim);}
+  .tab-btn[data-tab="videos"].active .n{background:rgba(122,74,46,0.15); color:var(--video-dim);}
+
+  .tab-panel{display:none; margin-top:24px;}
+  .tab-panel.active{display:block;}
+
+  .panel-label{
+    display:flex; align-items:center; gap:14px; margin:0 0 18px;
+    font-family:var(--mono); font-size:12px; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted-dim);
+  }
+  .panel-label::after{content:''; flex:1; height:1px; background:var(--line);}
+
+  /* ===== Card grid ===== */
+  .grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr)); gap:18px;}
+
+  .card{
+    background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+    overflow:hidden; display:flex; flex-direction:column; text-decoration:none; color:inherit;
+    transition:transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+    position:relative;
+  }
+  .card:hover{transform:translateY(-3px); border-color:var(--accent-dim); box-shadow:0 16px 30px -22px rgba(181,86,46,0.3);}
+  .card.li:hover{border-color:var(--linkedin-dim); box-shadow:0 16px 30px -22px rgba(74,90,107,0.3);}
+  .card.repo:hover{border-color:var(--repo); box-shadow:0 16px 30px -22px rgba(43,46,51,0.3);}
+  .card.video:hover{border-color:var(--video-dim); box-shadow:0 16px 30px -22px rgba(122,74,46,0.3);}
+
+  .thumb{width:100%; aspect-ratio:16/9; display:block; background:var(--panel-hi); position:relative; overflow:hidden;}
+  .thumb svg{width:100%; height:100%; display:block;}
+  .thumb img{width:100%; height:100%; display:block; object-fit:cover;}
+  .thumb .play-overlay{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(0deg, rgba(0,0,0,0.35), rgba(0,0,0,0.05));
+  }
+  .thumb .play-overlay svg{width:52px; height:52px; filter:drop-shadow(0 2px 6px rgba(0,0,0,0.4));}
+
+  .card-body{padding:16px 18px 18px; display:flex; flex-direction:column; gap:10px; flex:1;}
+
+  .route-line{display:flex; align-items:center; gap:8px; font-family:var(--mono); font-size:11px; color:var(--muted-dim);}
+  .route-line .status{width:7px; height:7px; border-radius:50%; background:var(--accent); flex-shrink:0;}
+  .card.li .route-line .status{background:var(--linkedin);}
+  .card.repo .route-line .status{background:var(--repo);}
+  .card.video .route-line .status{background:var(--video);}
+  .route-line .path{white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .route-line .date{margin-left:auto; flex-shrink:0; color:var(--muted-dim);}
+
+  .card-title{font-size:16.5px; font-weight:700; line-height:1.35; margin:0; letter-spacing:-0.005em;}
+  .card-desc{font-size:13.5px; color:var(--muted); line-height:1.55; margin:0; flex:1;}
+
+  .skill-row{display:flex; flex-wrap:wrap; gap:6px;}
+  .skill-pill{
+    font-family:var(--mono); font-size:10px; padding:3px 8px; border-radius:3px;
+    border:1px solid var(--line); color:var(--muted); background:var(--panel-hi); letter-spacing:0.02em;
+  }
+
+  .card-footer{display:flex; align-items:center; justify-content:space-between; margin-top:auto; padding-top:6px;}
+  .tag{
+    font-family:var(--mono); font-size:10.5px; padding:4px 9px; border-radius:3px;
+    background:rgba(181,86,46,0.12); color:var(--accent-dim); letter-spacing:0.03em;
+  }
+  .card.li .tag{background:rgba(74,90,107,0.12); color:var(--linkedin-dim);}
+  .card.repo .tag{background:rgba(43,46,51,0.1); color:var(--repo);}
+  .card.video .tag{background:rgba(122,74,46,0.12); color:var(--video-dim);}
+  .arrow{color:var(--muted-dim); font-size:15px; transition:transform .15s ease, color .15s ease;}
+  .card:hover .arrow{transform:translateX(3px); color:var(--text);}
+
+  .empty-state{display:none; text-align:center; padding:70px 20px; color:var(--muted-dim); font-family:var(--mono); font-size:13px;}
+  .empty-state.show{display:block;}
+  .empty-state .big{font-size:28px; margin-bottom:10px; display:block;}
+
+  footer{
+    margin-top:64px; padding-top:24px; border-top:1px solid var(--line);
+    display:flex; flex-wrap:wrap; justify-content:space-between; gap:14px;
+    font-family:var(--mono); font-size:12px; color:var(--muted-dim);
+  }
+  footer a{color:var(--muted); text-decoration:none; border-bottom:1px dotted var(--muted-dim);}
+  footer a:hover{color:var(--accent); border-color:var(--accent);}
+
+  @media (max-width:640px){
+    header{padding:40px 0 24px;}
+    .search-row{flex-wrap:wrap;}
+    .tab-btn{padding:10px 12px; font-size:11.5px;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important; transition:none !important;}
+  }
+
+  /* ===== LinkedIn profile modal ===== */
+  .modal-overlay{
+    display:none; position:fixed; inset:0; z-index:50; background:rgba(43,46,51,0.55);
+    align-items:center; justify-content:center; padding:24px;
+  }
+  .modal-overlay.show{display:flex;}
+  .modal-card{
+    position:relative; background:var(--panel); border:1px solid var(--line); border-radius:8px;
+    max-width:480px; width:100%; max-height:88vh; overflow-y:auto;
+    padding:28px 26px 24px; box-shadow:0 30px 60px -20px rgba(43,46,51,0.4);
+    animation:modalIn .18s ease;
+  }
+  @keyframes modalIn{ from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);} }
+
+  .modal-close{
+    position:absolute; top:14px; right:14px; width:28px; height:28px; border-radius:6px;
+    background:var(--panel-hi); border:1px solid var(--line); color:var(--muted);
+    cursor:pointer; font-size:13px; display:flex; align-items:center; justify-content:center;
+    transition:all .15s ease;
+  }
+  .modal-close:hover{color:var(--text); border-color:var(--accent-dim);}
+
+  .modal-header{display:flex; align-items:center; gap:14px; margin-bottom:20px; padding-right:20px;}
+  .modal-avatar{
+    width:54px; height:54px; border-radius:50%; background:var(--linkedin); color:#F5F3EE;
+    display:flex; align-items:center; justify-content:center; font-family:var(--mono);
+    font-weight:700; font-size:17px; flex-shrink:0;
+  }
+  .modal-name{font-size:18px; font-weight:800; letter-spacing:-0.01em;}
+  .modal-headline{font-size:12.5px; color:var(--muted); margin-top:2px; line-height:1.4;}
+
+  .modal-stats{
+    display:grid; grid-template-columns:repeat(3, 1fr); gap:10px; margin-bottom:22px;
+    padding:14px 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+  }
+  .modal-stat{text-align:center; display:flex; flex-direction:column; gap:2px;}
+  .modal-stat b{font-size:20px; font-weight:800; color:var(--accent-dim); font-family:var(--mono);}
+  .modal-stat span{font-size:10px; color:var(--muted-dim); font-family:var(--mono); letter-spacing:0.03em; text-transform:uppercase;}
+
+  .modal-section{margin-bottom:18px;}
+  .modal-section-title{
+    font-family:var(--mono); font-size:10.5px; letter-spacing:0.1em; text-transform:uppercase;
+    color:var(--muted-dim); margin-bottom:8px;
+  }
+  .modal-text{font-size:13.5px; line-height:1.6; color:var(--text); margin:0;}
+
+  .modal-pill-row{display:flex; flex-wrap:wrap; gap:6px;}
+  .modal-pill{
+    font-family:var(--mono); font-size:11px; padding:4px 10px; border-radius:999px;
+    background:var(--panel-hi); border:1px solid var(--line); color:var(--muted);
+  }
+
+  .modal-cred-row{display:flex; flex-direction:column; gap:6px;}
+  .modal-cred{font-size:12.5px; color:var(--text); display:flex; align-items:center; gap:6px;}
+
+  .modal-cta{
+    display:block; text-align:center; margin-top:8px; padding:11px; border-radius:6px;
+    background:var(--linkedin); color:#F5F3EE; text-decoration:none; font-family:var(--mono);
+    font-size:13px; font-weight:600; transition:background .15s ease;
+  }
+  .modal-cta:hover{background:var(--linkedin-dim);}
+
+  .modal-disclaimer{
+    font-family:var(--mono); font-size:10px; color:var(--muted-dim); text-align:center;
+    margin:12px 0 0; line-height:1.5;
+  }
+
+  @media (max-width:480px){
+    .modal-stats{grid-template-columns:repeat(3, 1fr); gap:4px;}
+    .modal-stat b{font-size:17px;}
+  }
+</style>
+</head>
+<body>
+<div class="grid-overlay"></div>
+
+<div class="wrap">
+  <div class="profile-bar">
+    <button type="button" class="profile-link" id="linkedinProfileBtn" title="View LinkedIn profile summary">
+      <span class="profile-icon li-icon">in</span>
+      <span class="profile-label">LinkedIn</span>
+    </button>
+    <a href="https://github.com/sandeeppachauri" target="_blank" rel="noopener" class="profile-link" title="GitHub">
+      <span class="profile-icon gh-icon">
+        <svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+      </span>
+      <span class="profile-label">GitHub</span>
+    </a>
+    <a href="https://sandeeppachauri.github.io/Sandeep_Portfolio/" target="_blank" rel="noopener" class="profile-link" title="Portfolio">
+      <span class="profile-icon pf-icon">◆</span>
+      <span class="profile-label">Portfolio</span>
+    </a>
+    <a href="https://sandeeppachauri.github.io/pulse-website/" target="_blank" rel="noopener" class="profile-link" title="Pulse Monitoring">
+      <span class="profile-icon pulse-icon">●</span>
+      <span class="profile-label">Pulse <span class="ip-badge">IP</span></span>
+    </a>
+    <a href="https://sandeeppachauri.github.io/Juri_Web/" target="_blank" rel="noopener" class="profile-link" title="Juri">
+      <span class="profile-icon juri-icon">J</span>
+      <span class="profile-label">Juri <span class="ip-badge">IP</span></span>
+    </a>
+  </div>
+
+  <header>
+    <div class="eyebrow"><span class="dot"></span> INTEGRATION &amp; AI ARCHITECTURE — LIVE INDEX</div>
+    <h1>Sandeep Pachauri<br><span>Endpoints, Exams &amp; Essays.</span></h1>
+    <p class="sub">A routed index of everything I've published on Claude certification prep, agentic architecture, and enterprise integration — built the way I'd design an ESB: discoverable, searchable, always on.</p>
+    <div class="meta-row">
+      <span><b>14+ yrs</b> Oracle SOA · OIC · Integration Architecture</span>
+      <span><b id="stat-total">0</b> endpoints indexed</span>
+      <span><b>100%</b> offline search</span>
+    </div>
+
+    <div class="console">
+      <div class="console-bar">
+        <div class="lights"><span class="l1"></span><span class="l2"></span><span class="l3"></span></div>
+        <span>search.local — no network calls</span>
+      </div>
+      <div class="search-row">
+        <span class="prompt">&gt;</span>
+        <input id="searchInput" type="text" placeholder="grep title, tag, or keyword…" autocomplete="off" spellcheck="false">
+        <button class="sort-btn" id="sortBtn" title="Sort by date">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M6 12h12M10 18h4"/></svg>
+          <span id="sortLabel">Newest</span>
+        </button>
+        <span class="count" id="resultCount"></span>
+      </div>
+      <div class="filters" id="filterRow">
+        <button class="chip active" data-filter="all">ALL</button>
+        <button class="chip" data-filter="github">EXAMS</button>
+        <button class="chip" data-filter="repo">REPOS</button>
+        <button class="chip" data-filter="linkedin">LINKEDIN</button>
+        <button class="chip" data-filter="video">VIDEOS</button>
+      </div>
+      <div class="labels-row" id="labelsRow">
+        <span class="labels-title">LABELS</span>
+        <div class="labels-list" id="labelsList"></div>
+      </div>
+    </div>
+  </header>
+
+  <div class="tab-row" id="tabRow">
+    <button class="tab-btn active" data-tab="exams">Exams <span class="n" id="tabCountExams">0</span></button>
+    <button class="tab-btn" data-tab="repos">Repos <span class="n" id="tabCountRepos">0</span></button>
+    <button class="tab-btn" data-tab="blog">Blog <span class="n" id="tabCountBlog">0</span></button>
+    <button class="tab-btn" data-tab="videos">Videos <span class="n" id="tabCountVideos">0</span></button>
+  </div>
+
+  <div class="tab-panel active" data-panel="exams">
+    <div class="panel-label">EXAM ROUTES</div>
+    <div class="grid" id="cardGridExams"></div>
+  </div>
+
+  <div class="tab-panel" data-panel="repos">
+    <div class="panel-label">REPO ROUTES</div>
+    <div class="grid" id="cardGridRepos"></div>
+  </div>
+
+  <div class="tab-panel" data-panel="blog">
+    <div class="panel-label">BLOG ROUTES</div>
+    <div class="grid" id="cardGridBlog"></div>
+  </div>
+
+  <div class="tab-panel" data-panel="videos">
+    <div class="panel-label">VIDEO ROUTES</div>
+    <div class="grid" id="cardGridVideos"></div>
+  </div>
+
+  <div class="empty-state" id="emptyState">
+    <span class="big">∅</span>
+    No matching routes. Try a different query or clear filters.
+  </div>
+
+  <footer>
+    <span>Built as a static route table — no backend, no tracking, no external calls at search time.</span>
+    <span><a href="https://www.linkedin.com/in/sandeep-pachauri-b03a211b/" target="_blank" rel="noopener">LinkedIn Profile</a></span>
+  </footer>
+</div>
+
+<div class="modal-overlay" id="linkedinModalOverlay">
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalName">
+    <button type="button" class="modal-close" id="modalCloseBtn" aria-label="Close">✕</button>
+    <div class="modal-header">
+      <div class="modal-avatar">SP</div>
+      <div>
+        <div class="modal-name" id="modalName">Sandeep Pachauri</div>
+        <div class="modal-headline">Enterprise Integration Architect — Oracle SOA · OIC · Claude Agent SDK</div>
+      </div>
+    </div>
+
+    <div class="modal-stats">
+      <div class="modal-stat"><b>14+</b><span>Years Experience</span></div>
+      <div class="modal-stat"><b>2</b><span>Claude Certifications</span></div>
+      <div class="modal-stat"><b>20</b><span>Published Articles</span></div>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">About</div>
+      <p class="modal-text">Enterprise Integration Architect with 14+ years across Oracle SOA Suite, OIC, and database integration, now focused on applying that middleware discipline to agentic AI — building accelerators, orchestration patterns, and production integrations on the Claude Agent SDK and MCP.</p>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">Focus Areas</div>
+      <div class="modal-pill-row">
+        <span class="modal-pill">Oracle SOA / OSB</span>
+        <span class="modal-pill">Oracle Integration Cloud</span>
+        <span class="modal-pill">Claude Agent SDK</span>
+        <span class="modal-pill">MCP</span>
+        <span class="modal-pill">Prompt Engineering</span>
+        <span class="modal-pill">LLM Evaluation</span>
+        <span class="modal-pill">Enterprise Architecture</span>
+      </div>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">Credentials</div>
+      <div class="modal-cred-row">
+        <span class="modal-cred">🏆 Claude Certified Developer — Foundations</span>
+        <span class="modal-cred">🏛️ Claude Certified Architect — Professional</span>
+      </div>
+    </div>
+
+    <a href="https://www.linkedin.com/in/sandeep-pachauri-b03a211b/" target="_blank" rel="noopener" class="modal-cta">
+      View full LinkedIn profile ↗
+    </a>
+    <p class="modal-disclaimer">Summary compiled from this dashboard's own content — not a live pull from LinkedIn.</p>
+  </div>
+</div>
+
+<script>
+// ============ DATA: each item is a "routed endpoint" ============
+// Dates are best-effort ordering placeholders (approximate order as items were provided).
+// Edit the "date" field on any item to the real publish date once known.
+const ITEMS = [
+  // ---------------- EXAMS ----------------
+  {
+    type: "github",
+    tag: "MOCK EXAM",
+    title: "Claude Certified Developer – Foundations (CCDV-F)",
+    desc: "Free 53-question scenario-based mock exam covering agentic workflows, prompt engineering, tool use, and context management. Instant feedback + explanations.",
+    url: "https://sandeeppachauri.github.io/Claude_Exams_Developer_Architect/exam_quiz.html",
+    path: "/exams/ccdv-f",
+    date: "2026-07-10",
+    skills: ["Claude", "MCP", "Agentic AI"],
+    keywords: "claude certified developer foundations ccdv-f exam quiz practice test anthropic agentic prompt engineering tool use context mcp model context protocol"
+  },
+  {
+    type: "github",
+    tag: "MOCK EXAM",
+    title: "Claude Certified Architect – Professional (CCAR-P)",
+    desc: "98-question practice test spanning Solution Design, Prompting & Context Engineering, Integration, Evaluation, Governance, and Stakeholder Communication.",
+    url: "https://sandeeppachauri.github.io/Claude_Exams_Developer_Architect/CCAR_P.html",
+    path: "/exams/ccar-p",
+    date: "2026-07-15",
+    skills: ["Claude", "MCP", "Architecture"],
+    keywords: "claude certified architect professional ccar-p exam quiz practice test anthropic solution design governance integration evaluation stakeholder mcp model context protocol"
+  },
+
+  // ---------------- REPOS ----------------
+  {
+    type: "repo",
+    tag: "REPOSITORY",
+    title: "Accelerators (Monorepo)",
+    desc: "Reusable building blocks for apps on the Claude Agent SDK — houses the auth and SDK-logging accelerators as independently installable Python packages.",
+    url: "https://github.com/sandeeppachauri/Accelerators",
+    path: "/repos/accelerators",
+    date: "2026-06-01",
+    skills: ["Claude Agent SDK", "Python"],
+    keywords: "accelerators monorepo claude agent sdk python reusable building blocks credential resolution logging github repo readme"
+  },
+  {
+    type: "repo",
+    tag: "PACKAGE",
+    title: "ClaudeSDKLoggerAccelerator",
+    desc: "Drop-in, on-demand tracing of Claude Agent SDK tool calls and agent activity via PreToolUse/PostToolUse hooks — JSON-line trace schema with 8 severity/activity scopes and rotating file sinks.",
+    url: "https://github.com/sandeeppachauri/Accelerators/tree/main/ClaudeSDKLoggerAccelerator",
+    path: "/repos/accelerators/sdk-logger",
+    date: "2026-06-05",
+    skills: ["Claude Agent SDK", "Observability", "Python"],
+    keywords: "claude sdk logger accelerator tracing tool calls hooks pretooluse posttooluse json trace schema rotation observability"
+  },
+  {
+    type: "repo",
+    tag: "PACKAGE",
+    title: "claude-auth-accelerator",
+    desc: "Reusable credential resolution for Claude Agent SDK consumers — tries console API key, ambient CLI OAuth session, then OS-mounted session, in order, so apps never touch env vars or mount paths directly.",
+    url: "https://github.com/sandeeppachauri/Accelerators/tree/main/claude-auth-accelerator",
+    path: "/repos/accelerators/auth",
+    date: "2026-06-03",
+    skills: ["Claude Agent SDK", "Auth", "Python"],
+    keywords: "claude auth accelerator credential resolution oauth api key os session claudeagentoptions authentication python"
+  },
+  {
+    type: "repo",
+    tag: "TOOL",
+    title: "Productivity Hub Tracker (MS 365)",
+    desc: "Self-hosted local dashboard syncing Outlook, Teams, and Calendar via a Claude Cowork hourly scheduler. Runs entirely on your machine — server-side state, self-signed HTTPS, zero third-party data flow.",
+    url: "https://github.com/sandeeppachauri/Productivity-Hub-Tracker-MS-365",
+    path: "/repos/productivity-hub-ms365",
+    date: "2026-07-01",
+    skills: ["Claude Cowork", "MS 365", "Node.js"],
+    keywords: "productivity hub tracker ms365 outlook teams calendar claude cowork scheduler self-hosted dashboard nodejs local server"
+  },
+  {
+    type: "repo",
+    tag: "REPOSITORY",
+    title: "claude-orchestration-accelerator",
+    desc: "Master accelerator composing auth, logging, prompt resolution, and model routing/fallback behind one execute() call for apps on the Claude Agent SDK or raw Messages API.",
+    url: "https://github.com/sandeeppachauri/claude-orchestration-accelerator",
+    path: "/repos/orchestration-accelerator",
+    date: "2026-07-05",
+    skills: ["Claude Agent SDK", "Messages API", "Orchestration"],
+    keywords: "claude orchestration accelerator model router process registry execute prompt resolution fallback agent sdk messages api python"
+  },
+
+  // ---------------- BLOG (LinkedIn articles, newest first as provided) ----------------
+  {
+    type: "linkedin", tag: "ARTICLE",
+    title: "Per-Step Model Selection Architecture",
+    desc: "A pattern for choosing the right Claude model on a per-step basis inside a multi-step pipeline, instead of locking an entire workflow to one model tier.",
+    url: "https://www.linkedin.com/pulse/per-step-model-selection-architecture-sandeep-pachauri-zghnc",
+    path: "/articles/per-step-model-selection", date: "2026-08-15",
+    skills: ["Claude", "Architecture", "Model Routing"],
+    keywords: "per step model selection architecture routing pipeline claude"
+  },
+  {
+    type: "linkedin", tag: "ARTICLE",
+    title: "Drop-in Tracing for Claude Agent SDK Applications",
+    desc: "How to add observability to Claude Agent SDK apps without touching core logic — a drop-in tracing approach for tool calls and agent activity.",
+    url: "https://www.linkedin.com/pulse/drop-in-tracing-claude-agent-sdk-applications-sandeep-pachauri-emflc",
+    path: "/articles/drop-in-tracing-agent-sdk", date: "2026-08-10",
+    skills: ["Claude Agent SDK", "Observability"],
+    keywords: "drop in tracing claude agent sdk applications logging observability hooks"
+  },
+  {
+    type: "linkedin", tag: "ARTICLE",
+    title: "Building and Using Accelerators for the Claude Agent SDK",
+    desc: "A practical guide to building reusable accelerator packages — auth, logging, orchestration — for apps built on the Claude Agent SDK.",
+    url: "https://www.linkedin.com/pulse/building-using-accelerators-claude-agent-sdk-sandeep-pachauri-v3rmc",
+    path: "/articles/building-using-accelerators", date: "2026-08-05",
+    skills: ["Claude Agent SDK", "Accelerators"],
+    keywords: "building using accelerators claude agent sdk reusable packages"
+  },
+  {
+    type: "linkedin", tag: "ARTICLE",
+    title: "Part 2: Building an LLM-as-Judge Pipeline (Technical)",
+    desc: "The technical follow-up on constructing an LLM-as-judge evaluation pipeline — scoring, rubric design, and pipeline wiring.",
+    url: "https://www.linkedin.com/pulse/part-2-building-llm-as-judge-pipeline-technical-sandeep-pachauri-nwwdc",
+    path: "/articles/llm-as-judge-part-2", date: "2026-07-28",
+    skills: ["LLM Evaluation", "Claude"],
+    keywords: "llm as judge pipeline technical part 2 evaluation scoring rubric"
+  },
+  {
+    type: "linkedin", tag: "ARTICLE",
+    title: "Part 1/2: Evaluating LLM Responses — A Practical Guide to Scoring",
+    desc: "A practical, hands-on guide to scoring and evaluating LLM responses systematically before wiring up a full judge pipeline.",
+    url: "https://www.linkedin.com/pulse/part-1-2-evaluating-llm-responses-practical-guide-scoring-pachauri-5fklc/",
+    path: "/articles/evaluating-llm-responses-part-1", date: "2026-07-22",
+    skills: ["LLM Evaluation", "Claude"],
+    keywords: "evaluating llm responses practical guide scoring part 1"
+  },
+  {
+    type: "linkedin", tag: "ARTICLE",
+    title: "Teaching Claude Your Playbook: A Practical Guide to Skills & Hooks",
+    desc: "How to encode your team's own playbook into Claude using Skills and Hooks so it behaves consistently with your process, not a generic default.",
+    url: "https://www.linkedin.com/pulse/teaching-claude-your-playbook-practical-guide-skills-hooks-pachauri-m3tte/",
+    path: "/articles/teaching-claude-your-playbook", date: "2026-07-18",
+    skills: ["Claude", "Skills", "Hooks"],
+    keywords: "teaching claude your playbook practical guide skills hooks"
+  },
+  {
+    type: "linkedin", tag: "ARTICLE",
+    title: "Claude Certifications Explained — For Engineers Who Aren't AI Specialists",
+    desc: "A plain-language breakdown of Anthropic's Claude certification tracks aimed at engineers coming from traditional software or integration backgrounds.",
+    url: "https://www.linkedin.com/pulse/claude-certifications-explained-engineers-who-arent-ai-pachauri-qnvgc",
+    path: "/articles/claude-certifications-explained", date: "2026-07-12",
+    skills: ["Claude", "Certification"],
+    keywords: "claude certifications explained engineers not ai specialists"
+  },
+  {
+    type: "linkedin", tag: "ARTICLE",
+    title: "Claude Agent SDK Authentication: API Key vs Code OAuth",
+    desc: "Comparing API-key auth against Claude Code's ambient OAuth session for Agent SDK apps — tradeoffs for local dev, CI, and containerized deployment.",
+    url: "https://www.linkedin.com/pulse/claude-agent-sdk-authentication-api-key-vs-code-oauth-pachauri-64ibc/",
+    path: "/articles/agent-sdk-auth-api-key-vs-oauth", date: "2026-07-08",
+    skills: ["Claude Agent SDK", "Auth"],
+    keywords: "claude agent sdk authentication api key vs code oauth"
+  },
+  {
+    type: "linkedin", tag: "ARTICLE",
+    title: "Why Model-as-a-Service (MaaS) Is a Distinct Category, Just Like SaaS",
+    desc: "Making the case that Model-as-a-Service deserves its own category of thinking — procurement, governance, and architecture — rather than being folded into SaaS.",
+    url: "https://www.linkedin.com/pulse/why-model-as-a-service-maas-distinct-category-just-saas-pachauri-lyuuc",
+    path: "/articles/model-as-a-service-distinct-category", date: "2026-07-02",
+    skills: ["MaaS", "Architecture", "Governance"],
+    keywords: "why model as a service maas distinct category just like saas"
+  },
+  {
+    type: "linkedin", tag: "ARTICLE",
+    title: "Prompt Evaluation Techniques: A Practical Guide to Working with Claude",
+    desc: "Concrete techniques for evaluating prompt quality and output reliability when building production applications on Claude.",
+    url: "https://www.linkedin.com/pulse/prompt-evaluation-techniques-practical-guide-working-claude-pachauri-wcaac",
+    path: "/articles/prompt-evaluation-techniques", date: "2026-06-26",
+    skills: ["Claude", "Prompt Engineering", "Evaluation"],
+    keywords: "prompt evaluation techniques practical guide working with claude"
+  },
+  {
+    type: "linkedin", tag: "ARTICLE",
+    title: "Prompt Engineering Techniques — Part 2",
+    desc: "The second installment covering more advanced prompt engineering techniques for production Claude applications.",
+    url: "https://www.linkedin.com/pulse/prompt-engineering-techniques-part-2-sandeep-pachauri-6wrwc",
+    path: "/articles/prompt-engineering-techniques-part-2", date: "2026-06-20",
+    skills: ["Claude", "Prompt Engineering"],
+    keywords: "prompt engineering techniques part 2"
+  },
+  {
+    type: "linkedin", tag: "ARTICLE",
+    title: "Prompt Engineering: A Practical Primer — Part 1 (Concepts)",
+    desc: "A foundational primer covering the core concepts of prompt engineering before diving into advanced techniques.",
+    url: "https://www.linkedin.com/pulse/prompt-engineering-practical-primer-part-1-concepts-sandeep-pachauri-vaqgc/",
+    path: "/articles/prompt-engineering-primer-part-1", date: "2026-06-15",
+    skills: ["Claude", "Prompt Engineering"],
+    keywords: "prompt engineering practical primer part 1 concepts"
+  },
+  {
+    type: "linkedin", tag: "ARTICLE",
+    title: "MCP Design Patterns for Enterprise Integration",
+    desc: "Design patterns for applying the Model Context Protocol inside enterprise integration landscapes — where it fits alongside existing middleware.",
+    url: "https://www.linkedin.com/pulse/mcp-design-patterns-enterprise-integration-sandeep-pachauri-zf5wc",
+    path: "/articles/mcp-design-patterns-enterprise", date: "2026-06-08",
+    skills: ["MCP", "Enterprise Integration"],
+    keywords: "mcp design patterns enterprise integration model context protocol"
+  },
+  {
+    type: "linkedin", tag: "ARTICLE",
+    title: "From SOA to AI Agents: Building Production Claude Agent SDK Apps",
+    desc: "Bridging classic SOA architecture principles with modern agentic design when building production apps on the Claude Agent SDK.",
+    url: "https://www.linkedin.com/pulse/from-soa-ai-agents-building-production-claude-agent-sdk-pachauri-8vkgc",
+    path: "/articles/from-soa-to-ai-agents", date: "2026-06-01",
+    skills: ["SOA", "Claude Agent SDK", "Architecture"],
+    keywords: "from soa to ai agents building production claude agent sdk apps"
+  },
+  {
+    type: "linkedin", tag: "ARTICLE",
+    title: "Calling MCP Servers from Oracle SOA Suite: A Wrapper Pattern",
+    desc: "A wrapper pattern for invoking MCP servers directly from Oracle SOA Suite composites, bridging classic middleware with the Model Context Protocol.",
+    url: "https://www.linkedin.com/pulse/calling-mcp-servers-from-oracle-soa-suite-wrapper-pattern-pachauri-dfxrc",
+    path: "/articles/mcp-servers-oracle-soa-wrapper", date: "2026-05-25",
+    skills: ["Oracle SOA", "MCP", "Integration Pattern"],
+    keywords: "calling mcp servers from oracle soa suite wrapper pattern"
+  },
+  {
+    type: "linkedin", tag: "ARTICLE",
+    title: "Giving an LLM Safe Hands: Oracle SOA/OSB",
+    desc: "How to give an LLM safe, governed 'hands' into an Oracle SOA/OSB estate — guardrails, scoping, and controlled tool access.",
+    url: "https://www.linkedin.com/pulse/giving-llm-safe-hands-oracle-soaosb-sandeep-pachauri-hdyhc",
+    path: "/articles/giving-llm-safe-hands-soa-osb", date: "2026-05-18",
+    skills: ["Oracle SOA", "OSB", "LLM Safety"],
+    keywords: "giving llm safe hands oracle soa osb guardrails governance"
+  },
+  {
+    type: "linkedin", tag: "ARTICLE",
+    title: "Connecting Oracle Database to Claude via Model Context Protocol (MCP)",
+    desc: "A hands-on walkthrough of wiring an Oracle Database into Claude using an MCP server, for direct, governed data access.",
+    url: "https://www.linkedin.com/pulse/connecting-oracle-database-claude-via-model-context-mcp-pachauri-8xcuc",
+    path: "/articles/connecting-oracle-db-claude-mcp", date: "2026-05-10",
+    skills: ["Oracle Database", "MCP", "Claude"],
+    keywords: "connecting oracle database to claude via model context protocol mcp"
+  },
+  {
+    type: "linkedin", tag: "ARTICLE",
+    title: "I Built a Personal Productivity Hub Powered by Claude AI — Here's How",
+    desc: "A first-person walkthrough of building a self-hosted personal productivity hub powered by Claude, syncing MS 365 data locally.",
+    url: "https://www.linkedin.com/pulse/i-built-personal-productivity-hub-powered-claude-ai-its-pachauri-uzkwc",
+    path: "/articles/built-personal-productivity-hub", date: "2026-05-02",
+    skills: ["Claude", "Productivity", "MS 365"],
+    keywords: "i built a personal productivity hub powered by claude ai"
+  },
+  {
+    type: "linkedin", tag: "ARTICLE",
+    title: "Claude Orchestration Accelerator",
+    desc: "A field-tested accelerator for orchestrating multi-agent Claude workflows in enterprise settings — patterns drawn from integration architecture practice.",
+    url: "https://www.linkedin.com/pulse/claude-orchestration-accelerator-sandeep-pachauri-obu7c/",
+    path: "/articles/orchestration-accelerator", date: "2026-04-20",
+    skills: ["Claude", "MCP", "Orchestration"],
+    keywords: "claude orchestration accelerator multi-agent enterprise integration architecture workflow linkedin article mcp model context protocol"
+  },
+  {
+    type: "linkedin", tag: "ARTICLE",
+    title: "Prompt Design: Why It Works — A Demo Isn't Enough",
+    desc: "Why production-grade prompt design demands more rigor than a working demo — lessons from building durable, maintainable Claude integrations.",
+    url: "https://www.linkedin.com/pulse/description-prompt-design-why-works-demo-isnt-enough-sandeep-pachauri-d0occ",
+    path: "/articles/prompt-design-why-it-works", date: "2026-04-10",
+    skills: ["Claude", "Prompt Engineering"],
+    keywords: "prompt design why works demo not enough production rigor claude integration linkedin article"
+  },
+
+  // ---------------- VIDEOS ----------------
+  {
+    type: "video", tag: "VIDEO",
+    title: "Claude & Integration Architecture — Video Walkthrough",
+    desc: "Video walkthrough covering Claude architecture patterns and integration practice. Open on YouTube for the full session.",
+    url: "https://www.youtube.com/watch?v=qd97Zgp-43Q",
+    videoId: "qd97Zgp-43Q",
+    path: "/videos/qd97Zgp-43Q", date: "2026-08-12",
+    skills: ["Claude", "Video"],
+    keywords: "video walkthrough claude integration architecture youtube"
+  },
+  {
+    type: "video", tag: "VIDEO",
+    title: "Claude Agent SDK — Video Walkthrough",
+    desc: "Video walkthrough on building with the Claude Agent SDK. Open on YouTube for the full session.",
+    url: "https://youtu.be/spCHV4NQ3oY",
+    videoId: "spCHV4NQ3oY",
+    path: "/videos/spCHV4NQ3oY", date: "2026-08-01",
+    skills: ["Claude Agent SDK", "Video"],
+    keywords: "video walkthrough claude agent sdk youtube"
+  },
+  {
+    type: "video", tag: "VIDEO",
+    title: "MCP & Enterprise Integration — Video Walkthrough",
+    desc: "Video walkthrough on MCP design patterns for enterprise integration. Open on YouTube for the full session.",
+    url: "https://youtu.be/zlJpLsp0HlY",
+    videoId: "zlJpLsp0HlY",
+    path: "/videos/zlJpLsp0HlY", date: "2026-07-20",
+    skills: ["MCP", "Video"],
+    keywords: "video walkthrough mcp enterprise integration youtube"
+  },
+  {
+    type: "video", tag: "VIDEO",
+    title: "Oracle SOA & Claude — Video Walkthrough",
+    desc: "Video walkthrough bridging Oracle SOA Suite and Claude-based agentic patterns. Open on YouTube for the full session.",
+    url: "https://youtu.be/yiJGTIPfRmI",
+    videoId: "yiJGTIPfRmI",
+    path: "/videos/yiJGTIPfRmI", date: "2026-07-05",
+    skills: ["Oracle SOA", "Claude", "Video"],
+    keywords: "video walkthrough oracle soa claude youtube"
+  },
+  {
+    type: "video", tag: "VIDEO",
+    title: "LLM Evaluation & Scoring — Video Walkthrough",
+    desc: "Video walkthrough on evaluating and scoring LLM responses in production pipelines. Open on YouTube for the full session.",
+    url: "https://youtu.be/K2f8Ec3N5NM?si=CEUksgtsGue4D9zA",
+    videoId: "K2f8Ec3N5NM",
+    path: "/videos/K2f8Ec3N5NM", date: "2026-06-22",
+    skills: ["LLM Evaluation", "Video"],
+    keywords: "video walkthrough llm evaluation scoring youtube"
+  },
+  {
+    type: "video", tag: "VIDEO",
+    title: "Claude Certifications — Video Walkthrough",
+    desc: "Video walkthrough explaining Claude certification tracks for engineers. Open on YouTube for the full session.",
+    url: "https://youtu.be/ZWPQiDbO800?si=XFcN9_vrh3x15cZ1",
+    videoId: "ZWPQiDbO800",
+    path: "/videos/ZWPQiDbO800", date: "2026-06-10",
+    skills: ["Claude", "Certification", "Video"],
+    keywords: "video walkthrough claude certifications youtube"
+  },
+  {
+    type: "video", tag: "VIDEO",
+    title: "Prompt Engineering Techniques — Video Walkthrough",
+    desc: "Video walkthrough covering practical prompt engineering techniques for Claude. Open on YouTube for the full session.",
+    url: "https://youtu.be/p22et_Uh738?si=5JJ6qAKaDy9zqwn7",
+    videoId: "p22et_Uh738",
+    path: "/videos/p22et_Uh738", date: "2026-05-28",
+    skills: ["Claude", "Prompt Engineering", "Video"],
+    keywords: "video walkthrough prompt engineering techniques youtube"
+  },
+  {
+    type: "video", tag: "VIDEO",
+    title: "Model-as-a-Service — Video Walkthrough",
+    desc: "Video walkthrough making the case for Model-as-a-Service as its own architectural category. Open on YouTube for the full session.",
+    url: "https://youtu.be/FEzp6EuIlYA?si=BKOd3CMKV1TW_IkM",
+    videoId: "FEzp6EuIlYA",
+    path: "/videos/FEzp6EuIlYA", date: "2026-05-15",
+    skills: ["MaaS", "Video"],
+    keywords: "video walkthrough model as a service maas youtube"
+  },
+  {
+    type: "video", tag: "VIDEO",
+    title: "Personal Productivity Hub — Video Walkthrough",
+    desc: "Video walkthrough of the self-hosted personal productivity hub powered by Claude. Open on YouTube for the full session.",
+    url: "https://youtu.be/ulDwr3h5Wag?si=h59X14vJNP_0JlnY",
+    videoId: "ulDwr3h5Wag",
+    path: "/videos/ulDwr3h5Wag", date: "2026-05-05",
+    skills: ["Claude", "Productivity", "Video"],
+    keywords: "video walkthrough personal productivity hub claude youtube"
+  }
+];
+
+// ============ SVG THUMBNAIL GENERATORS ============
+function examThumb(label, accentHex){
+  return `<svg viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg">
+    <rect width="400" height="225" fill="#E4E0D6"/>
+    ${Array.from({length:8}).map((_,i)=>`<line x1="${i*50}" y1="0" x2="${i*50}" y2="225" stroke="${accentHex}" stroke-opacity="0.08"/>`).join('')}
+    <circle cx="340" cy="35" r="4" fill="${accentHex}"/>
+    <text x="316" y="39" font-family="JetBrains Mono, monospace" font-size="9" fill="${accentHex}" text-anchor="end" letter-spacing="1">LIVE</text>
+    <rect x="30" y="70" width="150" height="10" rx="2" fill="${accentHex}" fill-opacity="0.9"/>
+    <rect x="30" y="90" width="240" height="7" rx="2" fill="#2B2E33" fill-opacity="0.45"/>
+    <rect x="30" y="104" width="200" height="7" rx="2" fill="#2B2E33" fill-opacity="0.3"/>
+    <g transform="translate(30,135)">
+      <rect width="110" height="30" rx="3" fill="none" stroke="${accentHex}" stroke-width="1.5"/>
+      <text x="55" y="19" font-family="JetBrains Mono, monospace" font-size="11" fill="${accentHex}" text-anchor="middle" font-weight="600">${label}</text>
+    </g>
+    <text x="30" y="200" font-family="JetBrains Mono, monospace" font-size="10" fill="#8B8578" letter-spacing="0.5">sandeeppachauri.github.io</text>
+  </svg>`;
+}
+
+function articleThumb(kicker){
+  return `<svg viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg">
+    <rect width="400" height="225" fill="#E9E5DA"/>
+    <g transform="translate(30,32)">
+      <rect width="26" height="26" rx="3" fill="#4A5A6B"/>
+      <text x="13" y="18" font-family="Inter, sans-serif" font-size="15" font-weight="800" fill="#F5F3EE" text-anchor="middle">in</text>
+    </g>
+    <text x="66" y="49" font-family="JetBrains Mono, monospace" font-size="10" fill="#4A5A6B" letter-spacing="1">LINKEDIN · ARTICLE</text>
+    <rect x="30" y="80" width="270" height="9" rx="2" fill="#2B2E33" fill-opacity="0.85"/>
+    <rect x="30" y="98" width="230" height="9" rx="2" fill="#2B2E33" fill-opacity="0.6"/>
+    <rect x="30" y="116" width="180" height="9" rx="2" fill="#2B2E33" fill-opacity="0.4"/>
+    <line x1="30" y1="150" x2="330" y2="150" stroke="#8B8578" stroke-opacity="0.6"/>
+    <text x="30" y="175" font-family="JetBrains Mono, monospace" font-size="10" fill="#8B8578" letter-spacing="0.5">Sandeep Pachauri</text>
+  </svg>`;
+}
+
+function repoThumb(label){
+  return `<svg viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg">
+    <rect width="400" height="225" fill="#E4E0D6"/>
+    <g transform="translate(30,32)">
+      <rect width="26" height="26" rx="13" fill="#2B2E33"/>
+      <path d="M13 5 C8 5 4.5 8.5 4.5 13.4 c0 3.9 2.5 7.2 6.1 8.4 0.4 0.1 0.6 -0.2 0.6 -0.4 v-1.6 c-2.5 0.5 -3 -1.1 -3 -1.1 -0.4 -1 -1 -1.3 -1 -1.3 -0.8 -0.6 0.1 -0.6 0.1 -0.6 0.9 0.1 1.4 0.9 1.4 0.9 0.8 1.4 2.1 1 2.6 0.7 0.1 -0.6 0.3 -1 0.6 -1.2 -2 -0.2 -4 -1 -4 -4.4 0 -1 0.3 -1.8 0.9 -2.4 -0.1 -0.2 -0.4 -1.1 0.1 -2.4 0 0 0.7 -0.2 2.4 0.9 0.7 -0.2 1.5 -0.3 2.2 -0.3 0.8 0 1.5 0.1 2.2 0.3 1.7 -1.1 2.4 -0.9 2.4 -0.9 0.5 1.3 0.2 2.2 0.1 2.4 0.6 0.6 0.9 1.4 0.9 2.4 0 3.4 -2.1 4.2 -4 4.4 0.3 0.3 0.6 0.8 0.6 1.6 v2.4 c0 0.2 0.2 0.5 0.6 0.4 3.6 -1.2 6.1 -4.5 6.1 -8.4 C21.5 8.5 18 5 13 5z" fill="#F5F3EE" transform="scale(0.85) translate(2,2)"/>
+    </g>
+    <text x="66" y="49" font-family="JetBrains Mono, monospace" font-size="10" fill="#2B2E33" letter-spacing="1">GITHUB · ${label}</text>
+    <rect x="30" y="80" width="270" height="9" rx="2" fill="#2B2E33" fill-opacity="0.85"/>
+    <rect x="30" y="98" width="230" height="9" rx="2" fill="#2B2E33" fill-opacity="0.6"/>
+    <rect x="30" y="116" width="180" height="9" rx="2" fill="#2B2E33" fill-opacity="0.4"/>
+    <line x1="30" y1="150" x2="330" y2="150" stroke="#8B8578" stroke-opacity="0.6"/>
+    <text x="30" y="175" font-family="JetBrains Mono, monospace" font-size="10" fill="#8B8578" letter-spacing="0.5">github.com/sandeeppachauri</text>
+  </svg>`;
+}
+
+function videoThumbHTML(videoId){
+  const thumbUrl = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+  return `<img src="${thumbUrl}" alt="Video thumbnail" loading="lazy" onerror="this.style.display='none'">
+    <div class="play-overlay">
+      <svg viewBox="0 0 68 48"><path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.63 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="#E4E0D6" fill-opacity="0.9"/><path d="M45 24 27 14v20" fill="#B5562E"/></svg>
+    </div>`;
+}
+
+// ============ RENDER ============
+const gridExams = document.getElementById('cardGridExams');
+const gridRepos = document.getElementById('cardGridRepos');
+const gridBlog = document.getElementById('cardGridBlog');
+const gridVideos = document.getElementById('cardGridVideos');
+const searchInput = document.getElementById('searchInput');
+const resultCount = document.getElementById('resultCount');
+const emptyState = document.getElementById('emptyState');
+const statTotal = document.getElementById('stat-total');
+const sortBtn = document.getElementById('sortBtn');
+const sortLabel = document.getElementById('sortLabel');
+let activeFilter = 'all';
+let sortDesc = true; // newest first by default
+let activeTab = 'exams';
+let activeLabel = null;
+
+const labelsList = document.getElementById('labelsList');
+
+const GRIDS = { github: gridExams, repo: gridRepos, linkedin: gridBlog, video: gridVideos };
+const TAB_OF_TYPE = { github: 'exams', repo: 'repos', linkedin: 'blog', video: 'videos' };
+
+function renderCard(item){
+  const isGit = item.type === 'github';
+  const isRepo = item.type === 'repo';
+  const isVideo = item.type === 'video';
+  let thumbInner;
+  if (isGit) thumbInner = examThumb(item.tag, '#B5562E');
+  else if (isRepo) thumbInner = repoThumb(item.tag);
+  else if (isVideo) thumbInner = videoThumbHTML(item.videoId);
+  else thumbInner = articleThumb(item.tag);
+
+  const skillTags = (item.skills || []).map(s => `<span class="skill-pill">${s}</span>`).join('');
+  const el = document.createElement('a');
+  el.href = item.url;
+  el.target = '_blank';
+  el.rel = 'noopener';
+  el.className = 'card ' + (isGit ? 'gh' : isRepo ? 'repo' : isVideo ? 'video' : 'li');
+  el.dataset.type = item.type;
+  el.dataset.date = item.date || '';
+  el.dataset.search = (item.title + ' ' + item.desc + ' ' + item.keywords + ' ' + item.tag + ' ' + (item.skills||[]).join(' ')).toLowerCase();
+  const destLabel = isGit ? 'github.io' : isRepo ? 'github.com' : isVideo ? 'youtube.com' : 'linkedin.com';
+  const dateLabel = item.date ? new Date(item.date + 'T00:00:00').toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'}) : '';
+  el.innerHTML = `
+    <div class="thumb">${thumbInner}</div>
+    <div class="card-body">
+      <div class="route-line"><span class="status"></span><span class="path">${item.path} → ${destLabel}</span><span class="date">${dateLabel}</span></div>
+      <h3 class="card-title">${item.title}</h3>
+      <p class="card-desc">${item.desc}</p>
+      ${skillTags ? `<div class="skill-row">${skillTags}</div>` : ''}
+      <div class="card-footer">
+        <span class="tag">${item.tag}</span>
+        <span class="arrow">→</span>
+      </div>
+    </div>
+  `;
+  return el;
+}
+
+function sortedItems(){
+  const copy = [...ITEMS];
+  copy.sort((a, b) => {
+    const da = a.date || '0000-00-00';
+    const db = b.date || '0000-00-00';
+    return sortDesc ? db.localeCompare(da) : da.localeCompare(db);
+  });
+  return copy;
+}
+
+function renderLabels(){
+  const allLabels = new Set();
+  ITEMS.forEach(item => (item.skills || []).forEach(s => allLabels.add(s)));
+  const sorted = Array.from(allLabels).sort((a, b) => a.localeCompare(b));
+
+  labelsList.innerHTML = '';
+  sorted.forEach(label => {
+    const btn = document.createElement('button');
+    btn.className = 'label-chip';
+    btn.textContent = label;
+    btn.dataset.label = label;
+    if (activeLabel === label) btn.classList.add('active');
+    btn.addEventListener('click', () => {
+      if (activeLabel === label) {
+        activeLabel = null;
+        searchInput.value = '';
+      } else {
+        activeLabel = label;
+        searchInput.value = label.toLowerCase();
+      }
+      renderLabels();
+      applyFilters();
+    });
+    labelsList.appendChild(btn);
+  });
+}
+
+function renderAll(){
+  gridExams.innerHTML = '';
+  gridRepos.innerHTML = '';
+  gridBlog.innerHTML = '';
+  gridVideos.innerHTML = '';
+  sortedItems().forEach(item => {
+    const card = renderCard(item);
+    GRIDS[item.type].appendChild(card);
+  });
+  statTotal.textContent = ITEMS.length;
+  updateTabCounts();
+  renderLabels();
+  applyFilters();
+}
+
+function updateTabCounts(){
+  document.getElementById('tabCountExams').textContent = gridExams.children.length;
+  document.getElementById('tabCountRepos').textContent = gridRepos.children.length;
+  document.getElementById('tabCountBlog').textContent = gridBlog.children.length;
+  document.getElementById('tabCountVideos').textContent = gridVideos.children.length;
+}
+
+function applyFilters(){
+  const query = searchInput.value.trim().toLowerCase();
+  const allCards = [...gridExams.children, ...gridRepos.children, ...gridBlog.children, ...gridVideos.children];
+  let visibleCount = 0;
+
+  allCards.forEach(card => {
+    const matchesType = activeFilter === 'all' || card.dataset.type === activeFilter;
+    const matchesQuery = query === '' || card.dataset.search.includes(query);
+    const visible = matchesType && matchesQuery;
+    card.style.display = visible ? '' : 'none';
+    if (visible) visibleCount++;
+  });
+
+  // If a specific type filter is chosen, jump to that tab automatically
+  if (activeFilter !== 'all' && TAB_OF_TYPE[activeFilter]) {
+    switchTab(TAB_OF_TYPE[activeFilter]);
+  }
+
+  const activeGrid = document.querySelector(`.tab-panel[data-panel="${activeTab}"] .grid`);
+  const activeVisible = activeGrid ? Array.from(activeGrid.children).some(c => c.style.display !== 'none') : false;
+  emptyState.classList.toggle('show', !activeVisible);
+
+  resultCount.textContent = query ? `${visibleCount} match${visibleCount === 1 ? '' : 'es'}` : '';
+}
+
+function switchTab(tabName){
+  activeTab = tabName;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tabName));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.dataset.panel === tabName));
+  const activeGrid = document.querySelector(`.tab-panel[data-panel="${tabName}"] .grid`);
+  const activeVisible = activeGrid ? Array.from(activeGrid.children).some(c => c.style.display !== 'none') : false;
+  emptyState.classList.toggle('show', !activeVisible);
+}
+
+// ============ EVENTS ============
+searchInput.addEventListener('input', () => {
+  if (activeLabel && searchInput.value.trim().toLowerCase() !== activeLabel.toLowerCase()) {
+    activeLabel = null;
+    renderLabels();
+  }
+  applyFilters();
+});
+
+document.getElementById('filterRow').addEventListener('click', (e) => {
+  const btn = e.target.closest('.chip');
+  if (!btn) return;
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active','li-active','repo-active','video-active'));
+  btn.classList.add('active');
+  if (btn.dataset.filter === 'linkedin') btn.classList.add('li-active');
+  if (btn.dataset.filter === 'repo') btn.classList.add('repo-active');
+  if (btn.dataset.filter === 'video') btn.classList.add('video-active');
+  activeFilter = btn.dataset.filter;
+  applyFilters();
+});
+
+document.getElementById('tabRow').addEventListener('click', (e) => {
+  const btn = e.target.closest('.tab-btn');
+  if (!btn) return;
+  switchTab(btn.dataset.tab);
+});
+
+sortBtn.addEventListener('click', () => {
+  sortDesc = !sortDesc;
+  sortBtn.classList.toggle('desc', !sortDesc);
+  sortLabel.textContent = sortDesc ? 'Newest' : 'Oldest';
+  renderAll();
+});
+
+// ============ LINKEDIN PROFILE MODAL ============
+const linkedinModalOverlay = document.getElementById('linkedinModalOverlay');
+const linkedinProfileBtn = document.getElementById('linkedinProfileBtn');
+const modalCloseBtn = document.getElementById('modalCloseBtn');
+
+function openLinkedinModal(){
+  linkedinModalOverlay.classList.add('show');
+}
+function closeLinkedinModal(){
+  linkedinModalOverlay.classList.remove('show');
+}
+linkedinProfileBtn.addEventListener('click', openLinkedinModal);
+modalCloseBtn.addEventListener('click', closeLinkedinModal);
+linkedinModalOverlay.addEventListener('click', (e) => {
+  if (e.target === linkedinModalOverlay) closeLinkedinModal();
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && linkedinModalOverlay.classList.contains('show')) closeLinkedinModal();
+});
+
+// keyboard: focus search on "/"
+document.addEventListener('keydown', (e) => {
+  if (e.key === '/' && document.activeElement !== searchInput){
+    e.preventDefault();
+    searchInput.focus();
+  }
+});
+
+renderAll();
+</script>
+</body>
+</html>
