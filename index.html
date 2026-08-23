@@ -83,6 +83,7 @@
   .pf-icon{background:var(--accent); color:#F5F3EE; font-size:11px;}
   .pulse-icon{background:#8F4222; color:#F5F3EE; font-size:14px;}
   .juri-icon{background:#6B4A8F; color:#F5F3EE; font-size:12px; font-family:var(--sans);}
+  .blogspot-icon{background:#F57C4A; color:#F5F3EE; font-size:12px; font-family:var(--sans); font-weight:800;}
   .profile-label{white-space:nowrap;}
   .ip-badge{
     font-size:9px; padding:1px 5px; border-radius:3px; background:rgba(181,86,46,0.15);
@@ -406,6 +407,10 @@
     <a href="https://sandeeppachauri.github.io/Juri_Web/" target="_blank" rel="noopener" class="profile-link" title="Juri">
       <span class="profile-icon juri-icon">J</span>
       <span class="profile-label">Juri <span class="ip-badge">IP</span></span>
+    </a>
+    <a href="https://oraclesoaosbbpmapi.blogspot.com/" target="_blank" rel="noopener" class="profile-link" title="Oracle SOA Blog">
+      <span class="profile-icon blogspot-icon">B</span>
+      <span class="profile-label">Blogspot</span>
     </a>
   </div>
 
@@ -812,6 +817,87 @@ const ITEMS = [
     path: "/articles/prompt-design-why-it-works", date: "2026-04-10",
     skills: ["Claude", "Prompt Engineering"],
     keywords: "prompt design why works demo not enough production rigor claude integration linkedin article"
+  },
+  {
+    type: "linkedin", tag: "ARTICLE",
+    title: "What is jq?",
+    desc: "An introduction to jq, the lightweight command-line JSON processor, and why it's a handy tool to know for integration and scripting work.",
+    url: "https://www.linkedin.com/pulse/what-jq-sandeep-pachauri-ajzzc/",
+    path: "/articles/what-is-jq", date: "2026-04-01",
+    skills: ["JSON", "CLI Tools"],
+    keywords: "what is jq json command line processor scripting tool"
+  },
+  {
+    type: "linkedin", tag: "ARTICLE",
+    title: "Agentic AI & OIC",
+    desc: "Exploring how agentic AI concepts intersect with Oracle Integration Cloud (OIC) — where autonomous agents fit into existing OIC-based integration flows.",
+    url: "https://www.linkedin.com/pulse/agentic-ai-oic-sandeep-pachauri-2w1lc/",
+    path: "/articles/agentic-ai-oic", date: "2026-03-24",
+    skills: ["Agentic AI", "OIC"],
+    keywords: "agentic ai oic oracle integration cloud autonomous agents"
+  },
+  {
+    type: "linkedin", tag: "ARTICLE",
+    title: "Setting Up Your First Local LLM Project — Meta Llama 2 Chat",
+    desc: "A hands-on walkthrough of setting up a local LLM project using Meta's Llama 2 Chat model, from environment setup to first inference.",
+    url: "https://www.linkedin.com/pulse/setting-up-your-first-local-llm-project-meta-llama-2-chat-pachauri-xq32c/",
+    path: "/articles/local-llm-llama-2-chat", date: "2026-03-15",
+    skills: ["LLM", "Llama 2", "Local Setup"],
+    keywords: "setting up first local llm project meta llama 2 chat"
+  },
+  {
+    type: "linkedin", tag: "ARTICLE",
+    title: "DevOps: Why Kubernetes (K8s)? How to Use — Basic Commands",
+    desc: "A practical primer on why Kubernetes matters for DevOps workflows, with a rundown of the basic commands to get started.",
+    url: "https://www.linkedin.com/pulse/dev-ops-why-kubernetesk8-how-usebasic-commands-sandeep-pachauri-tfbxc",
+    path: "/articles/devops-kubernetes-basics", date: "2026-03-05",
+    skills: ["DevOps", "Kubernetes"],
+    keywords: "devops why kubernetes k8s how to use basic commands"
+  },
+  {
+    type: "linkedin", tag: "ARTICLE",
+    title: "Docker: Build a Java Application (Part 5)",
+    desc: "Part 5 of the Docker DevOps series — building and containerizing a Java application step by step.",
+    url: "https://www.linkedin.com/pulse/docker-build-java-application-part-5-sandeep-pachauri-uvpvf",
+    path: "/articles/docker-java-application-part-5", date: "2026-02-26",
+    skills: ["Docker", "Java", "DevOps"],
+    keywords: "docker build java application part 5"
+  },
+  {
+    type: "linkedin", tag: "ARTICLE",
+    title: "Docker DevOps: WordPress Web App Hosting (Part 4)",
+    desc: "Part 4 of the Docker DevOps series — hosting a WordPress web application using Docker containers.",
+    url: "https://www.linkedin.com/pulse/docker-dev-ops-wordpress-web-app-hosting-part-4-sandeep-pachauri-9albc/",
+    path: "/articles/docker-wordpress-hosting-part-4", date: "2026-02-17",
+    skills: ["Docker", "WordPress", "DevOps"],
+    keywords: "docker devops wordpress web app hosting part 4"
+  },
+  {
+    type: "linkedin", tag: "ARTICLE",
+    title: "Docker: Working with Images & Containers (Part 3)",
+    desc: "Part 3 of the Docker DevOps series — the fundamentals of working with Docker images and containers.",
+    url: "https://www.linkedin.com/pulse/docker-working-images-containers-part3-sandeep-pachauri-y2nqc/",
+    path: "/articles/docker-images-containers-part-3", date: "2026-02-08",
+    skills: ["Docker", "DevOps"],
+    keywords: "docker working images containers part 3"
+  },
+  {
+    type: "linkedin", tag: "ARTICLE",
+    title: "Docker DevOps Tool — CI (Part 2)",
+    desc: "Part 2 of the Docker DevOps series — using Docker as a CI tool in the development pipeline.",
+    url: "https://www.linkedin.com/pulse/docker-dev-ops-tool-ci-part2-sandeep-pachauri-htrwc/",
+    path: "/articles/docker-devops-ci-part-2", date: "2026-01-30",
+    skills: ["Docker", "CI", "DevOps"],
+    keywords: "docker devops tool ci part 2"
+  },
+  {
+    type: "linkedin", tag: "ARTICLE",
+    title: "Beginning DevOps",
+    desc: "Part 1 of the DevOps series — a beginner's introduction to DevOps concepts and practices before diving into Docker specifics.",
+    url: "https://www.linkedin.com/pulse/beginning-dev-ops-sandeep-pachauri-mqz3c/",
+    path: "/articles/beginning-devops", date: "2026-01-20",
+    skills: ["DevOps"],
+    keywords: "beginning devops introduction part 1"
   },
 
   // ---------------- VIDEOS ----------------
