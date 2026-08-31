@@ -24,6 +24,9 @@
     --repo: #2B2E33;
     --video: #7A4A2E;
     --video-dim: #5C3720;
+    --gold: #B8860B;
+    --gold-dim: #8A6508;
+    --gold-bg: #FBF3DC;
     --danger: #A3402A;
     --radius: 4px;
     --mono: 'JetBrains Mono', monospace;
@@ -207,6 +210,12 @@
   .tab-btn[data-tab="blog"].active .n{background:rgba(74,90,107,0.15); color:var(--linkedin-dim);}
   .tab-btn[data-tab="videos"].active .n{background:rgba(122,74,46,0.15); color:var(--video-dim);}
 
+  .tab-btn.must-try-tab{color:var(--gold-dim); font-weight:700;}
+  .tab-btn.must-try-tab .n{background:rgba(184,134,11,0.18); color:var(--gold-dim);}
+  .tab-btn.must-try-tab.active{color:var(--gold-dim);}
+  .tab-btn.must-try-tab.active::after{background:var(--gold);}
+  .tab-btn.must-try-tab:hover{color:var(--gold-dim);}
+
   .tab-panel{display:none; margin-top:24px;}
   .tab-panel.active{display:block;}
 
@@ -215,6 +224,13 @@
     font-family:var(--mono); font-size:12px; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted-dim);
   }
   .panel-label::after{content:''; flex:1; height:1px; background:var(--line);}
+  .panel-label.must-try-label{color:var(--gold-dim); font-weight:700;}
+  .panel-label.must-try-label::after{background:var(--gold);}
+
+  .must-try-panel{
+    background:var(--gold-bg); border:1px solid rgba(184,134,11,0.35); border-radius:8px;
+    padding:22px 20px 24px; margin-top:24px !important;
+  }
 
   /* ===== Card grid ===== */
   .grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr)); gap:18px;}
@@ -252,6 +268,22 @@
   .card.c5 .route-line .status{background:var(--c5); box-shadow:0 0 0 3px rgba(107,74,110,0.2);}
   .card.c5 .tag{background:rgba(107,74,110,0.24); color:var(--c5-dim); border:1px solid rgba(107,74,110,0.4);}
   .card.c5:hover{border-color:var(--c5-dim); box-shadow:0 16px 30px -22px rgba(107,74,110,0.4);}
+
+  /* Must Try — gold theme override, distinct from the 5-color rotation */
+  .card.must-try{
+    background:#FFFDF6; border-color:rgba(184,134,11,0.4); border-top:3px solid var(--gold);
+  }
+  .card.must-try .route-line .status{background:var(--gold); box-shadow:0 0 0 3px rgba(184,134,11,0.22);}
+  .card.must-try .tag{background:rgba(184,134,11,0.2); color:var(--gold-dim); border:1px solid rgba(184,134,11,0.4);}
+  .card.must-try:hover{border-color:var(--gold-dim); box-shadow:0 16px 34px -20px rgba(184,134,11,0.45); transform:translateY(-4px);}
+
+  .star-row{display:flex; align-items:center; gap:2px;}
+  .star-row svg{width:15px; height:15px; fill:var(--gold);}
+  .must-try-badge{
+    display:inline-flex; align-items:center; gap:4px; font-family:var(--mono); font-size:9.5px;
+    letter-spacing:0.06em; padding:3px 8px; border-radius:999px; background:var(--gold);
+    color:#3D2C00; font-weight:700;
+  }
 
   .thumb{width:100%; aspect-ratio:16/9; display:block; background:var(--panel-hi); position:relative; overflow:hidden;}
   .thumb svg{width:100%; height:100%; display:block;}
@@ -464,13 +496,19 @@
   </header>
 
   <div class="tab-row" id="tabRow">
-    <button class="tab-btn active" data-tab="exams">Exams <span class="n" id="tabCountExams">0</span></button>
+    <button class="tab-btn must-try-tab active" data-tab="musttry">★ Must Try <span class="n" id="tabCountMustTry">0</span></button>
+    <button class="tab-btn" data-tab="exams">Exams <span class="n" id="tabCountExams">0</span></button>
     <button class="tab-btn" data-tab="repos">Repos <span class="n" id="tabCountRepos">0</span></button>
     <button class="tab-btn" data-tab="blog">Blog <span class="n" id="tabCountBlog">0</span></button>
     <button class="tab-btn" data-tab="videos">Videos <span class="n" id="tabCountVideos">0</span></button>
   </div>
 
-  <div class="tab-panel active" data-panel="exams">
+  <div class="tab-panel active must-try-panel" data-panel="musttry">
+    <div class="panel-label must-try-label">★ MUST TRY</div>
+    <div class="grid" id="cardGridMustTry"></div>
+  </div>
+
+  <div class="tab-panel" data-panel="exams">
     <div class="panel-label">EXAM ROUTES</div>
     <div class="grid" id="cardGridExams"></div>
   </div>
@@ -1074,6 +1112,7 @@ const gridExams = document.getElementById('cardGridExams');
 const gridRepos = document.getElementById('cardGridRepos');
 const gridBlog = document.getElementById('cardGridBlog');
 const gridVideos = document.getElementById('cardGridVideos');
+const gridMustTry = document.getElementById('cardGridMustTry');
 const searchInput = document.getElementById('searchInput');
 const resultCount = document.getElementById('resultCount');
 const emptyState = document.getElementById('emptyState');
@@ -1082,11 +1121,19 @@ const sortBtn = document.getElementById('sortBtn');
 const sortLabel = document.getElementById('sortLabel');
 let activeFilter = 'all';
 let sortDesc = true; // newest first by default
-let activeTab = 'exams';
+let activeTab = 'musttry';
 let activeLabel = null;
 let pageSize = 10;
 
 const labelsList = document.getElementById('labelsList');
+
+// URLs of items to feature in the "Must Try" section — both exams + 2 named repos, no blog posts
+const MUST_TRY_URLS = new Set([
+  "https://sandeeppachauri.github.io/Claude_Exams_Developer_Architect/exam_quiz.html",
+  "https://sandeeppachauri.github.io/Claude_Exams_Developer_Architect/CCAR_P.html",
+  "https://github.com/sandeeppachauri/claude-orchestration-accelerator",
+  "https://github.com/sandeeppachauri/Accelerators/tree/main/claude-auth-accelerator"
+]);
 
 const GRIDS = { github: gridExams, repo: gridRepos, linkedin: gridBlog, video: gridVideos };
 const TAB_OF_TYPE = { github: 'exams', repo: 'repos', linkedin: 'blog', video: 'videos' };
@@ -1097,7 +1144,8 @@ function renderCard(item, colorIndex){
   const isGit = item.type === 'github';
   const isRepo = item.type === 'repo';
   const isVideo = item.type === 'video';
-  const rotationHex = COLOR_HEX[colorIndex % 5];
+  const isMustTry = MUST_TRY_URLS.has(item.url);
+  const rotationHex = isMustTry ? '#B8860B' : COLOR_HEX[colorIndex % 5];
   let thumbInner;
   if (isGit) thumbInner = examThumb(item.tag, rotationHex);
   else if (isRepo) thumbInner = repoThumb(item.tag, rotationHex);
@@ -1110,16 +1158,21 @@ function renderCard(item, colorIndex){
   el.target = '_blank';
   el.rel = 'noopener';
   const colorClass = 'c' + ((colorIndex % 5) + 1);
-  el.className = 'card ' + (isGit ? 'gh' : isRepo ? 'repo' : isVideo ? 'video' : 'li') + ' ' + colorClass;
+  el.className = 'card ' + (isGit ? 'gh' : isRepo ? 'repo' : isVideo ? 'video' : 'li') + ' ' + colorClass + (isMustTry ? ' must-try' : '');
   el.dataset.type = item.type;
   el.dataset.date = item.date || '';
-  el.dataset.search = (item.title + ' ' + item.desc + ' ' + item.keywords + ' ' + item.tag + ' ' + (item.skills||[]).join(' ')).toLowerCase();
+  el.dataset.search = (item.title + ' ' + item.desc + ' ' + item.keywords + ' ' + item.tag + ' ' + (item.skills||[]).join(' ') + (isMustTry ? ' must try featured recommended' : '')).toLowerCase();
   const destLabel = isGit ? 'github.io' : isRepo ? 'github.com' : isVideo ? 'youtube.com' : 'linkedin.com';
   const dateLabel = item.date ? new Date(item.date + 'T00:00:00').toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'}) : '';
+
+  const starSvg = `<svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.7 7-6.3-3.9L5.7 21l1.7-7-5.4-4.7 7.1-.6z"/></svg>`;
+  const starRow = isMustTry ? `<div class="star-row">${starSvg.repeat(5)}<span class="must-try-badge">★ MUST TRY</span></div>` : '';
+
   el.innerHTML = `
     <div class="thumb">${thumbInner}</div>
     <div class="card-body">
       <div class="route-line"><span class="status"></span><span class="path">${item.path} → ${destLabel}</span><span class="date">${dateLabel}</span></div>
+      ${starRow}
       <h3 class="card-title">${item.title}</h3>
       <p class="card-desc">${item.desc}</p>
       ${skillTags ? `<div class="skill-row">${skillTags}</div>` : ''}
@@ -1174,11 +1227,18 @@ function renderAll(){
   gridRepos.innerHTML = '';
   gridBlog.innerHTML = '';
   gridVideos.innerHTML = '';
+  gridMustTry.innerHTML = '';
   const gridCounters = { github: 0, repo: 0, linkedin: 0, video: 0 };
+  let mustTryIndex = 0;
   sortedItems().forEach(item => {
     const card = renderCard(item, gridCounters[item.type]);
     gridCounters[item.type]++;
     GRIDS[item.type].appendChild(card);
+    if (MUST_TRY_URLS.has(item.url)) {
+      const mtCard = renderCard(item, mustTryIndex);
+      mustTryIndex++;
+      gridMustTry.appendChild(mtCard);
+    }
   });
   statTotal.textContent = ITEMS.length;
   updateTabCounts();
@@ -1191,22 +1251,23 @@ function updateTabCounts(){
   document.getElementById('tabCountRepos').textContent = gridRepos.children.length;
   document.getElementById('tabCountBlog').textContent = gridBlog.children.length;
   document.getElementById('tabCountVideos').textContent = gridVideos.children.length;
+  document.getElementById('tabCountMustTry').textContent = gridMustTry.children.length;
 }
 
 function applyFilters(){
   const query = searchInput.value.trim().toLowerCase();
-  const grids = [gridExams, gridRepos, gridBlog, gridVideos];
+  const grids = [gridExams, gridRepos, gridBlog, gridVideos, gridMustTry];
   let visibleCount = 0;
 
   grids.forEach(grid => {
     let shownInGrid = 0;
     Array.from(grid.children).forEach(card => {
-      const matchesType = activeFilter === 'all' || card.dataset.type === activeFilter;
+      const matchesType = activeFilter === 'all' || card.dataset.type === activeFilter || grid === gridMustTry;
       const matchesQuery = query === '' || card.dataset.search.includes(query);
       const matches = matchesType && matchesQuery;
       const withinPageSize = matches && shownInGrid < pageSize;
       card.style.display = withinPageSize ? '' : 'none';
-      if (withinPageSize){ shownInGrid++; visibleCount++; }
+      if (withinPageSize){ shownInGrid++; if (grid !== gridMustTry) visibleCount++; }
     });
   });
 
