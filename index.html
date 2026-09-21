@@ -294,6 +294,10 @@
   }
   .thumb .play-overlay svg{width:52px; height:52px; filter:drop-shadow(0 2px 6px rgba(0,0,0,0.4));}
 
+  /* LinkedIn header image: fallback SVG sits behind, live image covers it once loaded */
+  .li-thumb-fallback{position:absolute; inset:0; width:100%; height:100%;}
+  .li-thumb-live{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; background:var(--panel-hi);}
+
   .card-body{padding:16px 18px 18px; display:flex; flex-direction:column; gap:10px; flex:1;}
 
   .route-line{display:flex; align-items:center; gap:8px; font-family:var(--mono); font-size:11px; color:var(--muted-dim);}
@@ -444,10 +448,6 @@
       <span class="profile-icon blogspot-icon">B</span>
       <span class="profile-label">Blogspot</span>
     </a>
-    <a href="https://sandeeppachauri.github.io/Claude_Exams_Developer_Architect/" target="_blank" rel="noopener" class="profile-link" title="Claude Mock Exams">
-      <span class="profile-icon pf-icon">🏆</span>
-      <span class="profile-label">Mock exam- Claude</span>
-    </a>
   </div>
 
   <header>
@@ -556,8 +556,7 @@
 
     <div class="modal-stats">
       <div class="modal-stat"><b>14+</b><span>Years Experience</span></div>
-      <div class="modal-stat"><b>4</b><span>Claude Certifications</span></div>
-      <div class="modal-stat"><b>9</b><span>Oracle Certifications</span></div>
+      <div class="modal-stat"><b>2</b><span>Claude Certifications</span></div>
       <div class="modal-stat"><b>20</b><span>Published Articles</span></div>
     </div>
 
@@ -580,27 +579,10 @@
     </div>
 
     <div class="modal-section">
-      <div class="modal-section-title">Claude Certifications</div>
+      <div class="modal-section-title">Credentials</div>
       <div class="modal-cred-row">
-        <span class="modal-cred">🏆 Claude Developer Foundations</span>
-        <span class="modal-cred">🎓 Claude Certified Associate – Foundations</span>
-        <span class="modal-cred">📘 Claude Certified Architect – Foundations</span>
-        <span class="modal-cred">🏛️ Claude Certified Architect – Professional</span>
-      </div>
-    </div>
-
-    <div class="modal-section">
-      <div class="modal-section-title">Oracle Certifications</div>
-      <div class="modal-cred-row">
-        <span class="modal-cred">🧠 Agentic AI Foundations Associate (1Z0-1157-26)</span>
-        <span class="modal-cred">⚙️ OCI 2025 DevOps Professional (1Z0-1109-25)</span>
-        <span class="modal-cred">✨ OCI 2025 Generative AI Professional</span>
-        <span class="modal-cred">🤖 OCI 2025 Certified AI Foundations Associate</span>
-        <span class="modal-cred">🔗 OCI 2025 Certified Application Integration Professional</span>
-        <span class="modal-cred">🧩 Oracle Fusion AI Agent Studio Foundations Associate – Rel 1 (2025)</span>
-        <span class="modal-cred">☁️ OCI 2025/2024 Foundations Associate (1Z0-1085-25)</span>
-        <span class="modal-cred">🏗️ OCI 2024 Architect Associate</span>
-        <span class="modal-cred">🌐 OCI 2025 Certified Multi-Cloud Architect Associate</span>
+        <span class="modal-cred">🏆 Claude Certified Developer — Foundations</span>
+        <span class="modal-cred">🏛️ Claude Certified Architect — Professional</span>
       </div>
     </div>
 
@@ -638,17 +620,6 @@ const ITEMS = [
     date: "2026-07-15",
     skills: ["Claude", "MCP", "Architecture"],
     keywords: "claude certified architect professional ccar-p exam quiz practice test anthropic solution design governance integration evaluation stakeholder mcp model context protocol"
-  },
-  {
-    type: "github",
-    tag: "MOCK EXAM",
-    title: "Claude Certified Associate",
-    desc: "Mock exam covering core Claude concepts, prompting fundamentals, and practical usage patterns for developers and architects getting started with Claude.",
-    url: "https://sandeeppachauri.github.io/Claude_Exams_Developer_Architect/ccao_f_quiz.html",
-    path: "/exams/claude-certified-associate",
-    date: "2026-09-02",
-    skills: ["Claude", "MCP", "Agentic AI"],
-    keywords: "claude certified associate exam quiz practice test anthropic prompting fundamentals developer architect mcp model context protocol"
   },
 
   // ---------------- REPOS ----------------
@@ -988,6 +959,78 @@ const ITEMS = [
     skills: ["Claude", "Skills", "Configuration"],
     keywords: "claude.md vs agents.md vs skill.md configuration files"
   },
+  {
+    type: "linkedin", tag: "ARTICLE",
+    title: "MCP & Claude Configuration Files: Access Control & Tunneling",
+    desc: "How MCP and Claude configuration files interact with access control and tunneling setups — securing what Claude can reach and how.",
+    url: "https://www.linkedin.com/pulse/mcp-claude-configuration-files-access-control-tunnel-sandeep-pachauri-090af/",
+    path: "/articles/mcp-claude-config-access-control-tunnel", date: "2026-08-28",
+    skills: ["MCP", "Claude", "Security"],
+    keywords: "mcp claude configuration files access control tunnel security"
+  },
+  {
+    type: "linkedin", tag: "ARTICLE",
+    title: "Self-Hosted Claude Agent SDK vs Anthropic-Hosted / Managed",
+    desc: "Comparing self-hosted Claude Agent SDK deployments against Anthropic-hosted and managed options — tradeoffs in control, ops burden, and cost.",
+    url: "https://www.linkedin.com/pulse/self-hosted-claude-agent-sdk-anthropic-hosted-managed-pachauri-vmfjf/",
+    path: "/articles/self-hosted-vs-managed-agent-sdk", date: "2026-09-01",
+    skills: ["Claude Agent SDK", "Deployment", "Architecture"],
+    keywords: "self hosted claude agent sdk anthropic hosted managed deployment"
+  },
+  {
+    type: "linkedin", tag: "ARTICLE",
+    title: "Setting Up CLAUDE.md: A UI Designer's Guide to Design",
+    desc: "A guide for UI designers on setting up CLAUDE.md to steer Claude's output toward consistent, on-brand design decisions.",
+    url: "https://www.linkedin.com/pulse/setting-up-claudemd-ui-designer-guide-design-sandeep-pachauri-bqukf/",
+    path: "/articles/claudemd-ui-designer-guide", date: "2026-09-03",
+    skills: ["Claude", "CLAUDE.md", "Design"],
+    keywords: "setting up claude.md ui designer guide design"
+  },
+  {
+    type: "linkedin", tag: "ARTICLE",
+    title: "How to Design a CLAUDE.md File: Best Practices",
+    desc: "Best practices for structuring a CLAUDE.md file so Claude reliably follows project conventions instead of guessing at them.",
+    url: "https://www.linkedin.com/pulse/how-design-claudemd-file-best-practices-sandeep-pachauri-xzhac/",
+    path: "/articles/how-to-design-claudemd-best-practices", date: "2026-09-05",
+    skills: ["Claude", "CLAUDE.md"],
+    keywords: "how to design claude.md file best practices"
+  },
+  {
+    type: "linkedin", tag: "ARTICLE",
+    title: "How to Verify Your CLAUDE.md Is Actually Working",
+    desc: "Practical checks for confirming a CLAUDE.md file is actually influencing Claude's behavior, not just sitting unread in the repo.",
+    url: "https://www.linkedin.com/pulse/how-verify-your-claudemd-actually-working-sandeep-pachauri-apfxc/",
+    path: "/articles/verify-claudemd-working", date: "2026-09-08",
+    skills: ["Claude", "CLAUDE.md", "Evaluation"],
+    keywords: "how to verify your claude.md actually working"
+  },
+  {
+    type: "linkedin", tag: "ARTICLE",
+    title: "Fine-Tuning & Enhancing Model Knowledge — Part 1",
+    desc: "Part 1 of a series on fine-tuning and enhancing a model's knowledge — foundational concepts before comparing techniques.",
+    url: "https://www.linkedin.com/pulse/fine-tuning-enhancing-model-knowledge-part-1-sandeep-pachauri-dctpc/",
+    path: "/articles/fine-tuning-model-knowledge-part-1", date: "2026-09-10",
+    skills: ["Fine-Tuning", "LLM"],
+    keywords: "fine tuning enhancing model knowledge part 1"
+  },
+  {
+    type: "linkedin", tag: "ARTICLE",
+    title: "Fine-Tuning & Enhancing Model Knowledge — Part 2",
+    desc: "Part 2 continuing the series on fine-tuning and enhancing model knowledge, going deeper into technique tradeoffs.",
+    url: "https://www.linkedin.com/pulse/fine-tuning-enhancing-model-knowledge-part-2-sandeep-pachauri-3qjnc/",
+    path: "/articles/fine-tuning-model-knowledge-part-2", date: "2026-09-12",
+    skills: ["Fine-Tuning", "LLM"],
+    keywords: "fine tuning enhancing model knowledge part 2"
+  },
+  {
+    type: "linkedin", tag: "ARTICLE",
+    title: "Part 3: File-Based RAG — The Other Way to Make a Model Know Your Domain",
+    desc: "Part 3 of the series — using file-based RAG as an alternative to fine-tuning for grounding a model in domain-specific knowledge.",
+    url: "https://www.linkedin.com/pulse/part-3-file-based-rag-other-way-make-model-know-your-domain-pachauri-jqkjc/",
+    path: "/articles/file-based-rag-part-3", date: "2026-09-15",
+    skills: ["RAG", "LLM", "Fine-Tuning"],
+    keywords: "part 3 file based rag other way make model know your domain"
+  },
 
   // ---------------- VIDEOS ----------------
   {
@@ -1116,6 +1159,19 @@ function articleThumb(kicker, accentHex){
   </svg>`;
 }
 
+// Live header image for LinkedIn articles: the visitor's own browser calls Microlink's
+// public metadata API to fetch the article's real Open Graph banner. If Microlink is
+// unreachable, rate-limited, or the article has no og:image, the fallback SVG underneath
+// (still rendered, positioned behind) remains visible — the <img> just never covers it.
+function linkedinRealThumbHTML(articleUrl, kicker, accentHex){
+  const microlinkImgSrc = `https://api.microlink.io/?url=${encodeURIComponent(articleUrl)}&meta=false&embed=image.url`;
+  return `
+    <div class="li-thumb-fallback">${articleThumb(kicker, accentHex)}</div>
+    <img class="li-thumb-live" src="${microlinkImgSrc}" alt="Article header image" loading="lazy"
+      onerror="this.style.display='none';">
+  `;
+}
+
 function repoThumb(label, accentHex){
   return `<svg viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg">
     <rect width="400" height="225" fill="#E4E0D6"/>
@@ -1164,7 +1220,6 @@ const labelsList = document.getElementById('labelsList');
 const MUST_TRY_URLS = new Set([
   "https://sandeeppachauri.github.io/Claude_Exams_Developer_Architect/exam_quiz.html",
   "https://sandeeppachauri.github.io/Claude_Exams_Developer_Architect/CCAR_P.html",
-  "https://sandeeppachauri.github.io/Claude_Exams_Developer_Architect/ccao_f_quiz.html",
   "https://github.com/sandeeppachauri/claude-orchestration-accelerator",
   "https://github.com/sandeeppachauri/Accelerators/tree/main/claude-auth-accelerator"
 ]);
@@ -1184,7 +1239,7 @@ function renderCard(item, colorIndex){
   if (isGit) thumbInner = examThumb(item.tag, rotationHex);
   else if (isRepo) thumbInner = repoThumb(item.tag, rotationHex);
   else if (isVideo) thumbInner = videoThumbHTML(item.videoId);
-  else thumbInner = articleThumb(item.tag, rotationHex);
+  else thumbInner = linkedinRealThumbHTML(item.url, item.tag, rotationHex);
 
   const skillTags = (item.skills || []).map(s => `<span class="skill-pill">${s}</span>`).join('');
   const el = document.createElement('a');
